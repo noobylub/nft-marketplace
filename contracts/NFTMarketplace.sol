@@ -135,7 +135,7 @@ contract NFTMarketplace is ERC721URIStorage {
         itemMarket.owner = payable(address(this));
         //keeping track of number of items in the market
         _itemsSold.decrement();
-        _transfer(itemMarket.owner, payable(address(this)), tokenID);
+        _transfer(msg.sender, payable(address(this)), tokenID);
         idToMarketItem[tokenID] = itemMarket;
     }
 
@@ -158,13 +158,13 @@ contract NFTMarketplace is ERC721URIStorage {
         return marketItems;
     }
 
-    //fetches all nfts listed and unlisted
-    function fetchMyNFT() public view returns (MarketItem[] memory, uint256) {
+    //fetches all nfts unlisted which is basically his own
+    function fetchMyNFT() public view returns (MarketItem[] memory) {
         //keep track of how many items I have
         uint256 ownedItemCount = 0;
         uint256 ownedIndex = 0;
         for (uint256 i = 1; i <= _tokenIds.current(); i++) {
-            if (idToMarketItem[i].owner == msg.sender) {
+            if (idToMarketItem[i].owner == msg.sender ) {
                 ownedItemCount++;
             }
         }
@@ -177,7 +177,7 @@ contract NFTMarketplace is ERC721URIStorage {
                 ownedIndex++;
             }
         }
-        return (ownedNFTs, ownedItemCount);
+        return (ownedNFTs);
     }
 
     function fetchMyListedNFT() public view returns (MarketItem[] memory) {
@@ -192,7 +192,7 @@ contract NFTMarketplace is ERC721URIStorage {
         }
 
         MarketItem[] memory listedOwnedNFT = new MarketItem[](ownedTotal);
-        for (uint256 i = 1; i < totalMarketItem; i++) {
+        for (uint256 i = 1; i <= totalMarketItem; i++) {
             if (idToMarketItem[i].seller == msg.sender) {
                 MarketItem storage itemListed = idToMarketItem[i];
                 listedOwnedNFT[ownedID] = itemListed;
