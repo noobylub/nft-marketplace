@@ -13,12 +13,12 @@ async function main() {
 
   const lockedAmount = hre.ethers.utils.parseEther("1");
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  const NFTmarketplace = await hre.ethers.getContractFactory("NFTMarketplace");
+  const nftMarketplace = await Lock.deploy(nftMarketplace);
 
   await lock.deployed();
 
-  console.log("Lock with 1 ETH deployed to:", lock.address);
+  console.log("NFTMarketplace address: ", nftMarketplace.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

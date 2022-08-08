@@ -64,12 +64,13 @@ contract NFTMarketplace is ERC721URIStorage {
         //mint with owner first then the item itself
         //then setting the ID of it with that specific URI
         _mint(msg.sender, newTokenID);
+        //the URI is basically the ipfs URI that was sent from the createlisting method
         _setTokenURI(newTokenID, tokenURI);
         puttingMarket(_tokenIds.current(), price);
         return newTokenID;
     }
 
-    //putting token id into the market
+    //putting token id into the market from creating it 
     function puttingMarket(uint256 tokenId, uint256 price) private {
         require(price > 0, "price must be greater than 0");
         //collecting the fund
@@ -143,11 +144,12 @@ contract NFTMarketplace is ERC721URIStorage {
     function fetchMarket() public view returns (MarketItem[] memory) {
         uint256 allItems = _tokenIds.current();
         uint256 unsoldItems = _tokenIds.current() - _itemsSold.current();
-
+        
         MarketItem[] memory marketItems = new MarketItem[](unsoldItems);
         //this way works because there is still something at the very end,
         //and starts with 1, so the +=1 works.
         uint256 currentIndex = 0;
+        //identify by tokenID
         for (uint256 i = 1; i <= allItems; i++) {
             if (idToMarketItem[i].owner == address(this)) {
                 MarketItem storage unsoldItem = idToMarketItem[i];
