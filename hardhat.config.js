@@ -4,6 +4,7 @@ require("@nomiclabs/hardhat-waffle")
 module.exports = {
   //sample just for trial 
   defaultNetwork : "hardhat",
+  allowUnlimitedContractSize: true,
   networks : {
     hardhat : {
       chainId : 1337

@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }) {
           <Link href="/my-nfts">
             <a  className="mr-10 text-2xl hover-main-menu text-pink-500">My NFTs</a>
           </Link>
-          <Link href="/marketplace">
+          <Link href="/listed-nfts0x5FbDB2315678afecb367f032d93F642f64180aa3">
             <a  className="mr-10 text-2xl hover-main-menu text-pink-500">Dashboard</a>
           </Link>
         </div>

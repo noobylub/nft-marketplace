@@ -5,8 +5,9 @@ import { create as ipfsHttpClient } from "ipfs-http-client";
 //for the client.add later
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 import Web3Modal from "web3modal";
-import {nftMarketAddress}  from "../config";
+import nftMarketAddress  from "../config";
 import NFTMarketplace  from "../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json";
+import { useRouter } from "next/router";
 
 export default function CreateNFT() {
   //the data
@@ -15,7 +16,7 @@ export default function CreateNFT() {
   const [name, setName] = useState("");
   const [fileURL, setFileURL] = useState(null);
   const [message, setMessage] = useState("Input the Following Details");
-
+  const router = useRouter();
   async function onChange(e) {
     //uploading image
     const imageURL = e.target.files[0];
@@ -60,28 +61,28 @@ export default function CreateNFT() {
     }
   }
 
-  // async function SubmitMarketplace(){
-  //   //setting up web3
-  //   const url = await uploadIPFS();
+  async function SubmitMarketplace(){
+    //setting up web3
+    const url = await uploadIPFS();
 
-  //   const web3Modal = new Web3Modal();
-  //   const instance = web3Modal.connect();
-  //   const provider = new ethers.providers.Web3Provider(instance);
-  //   console.log(provider);
-  //   const signer = provider.getSigner();
+    const web3Modal = new Web3Modal();
+    const instance = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(instance);
+    console.log(provider);
+    const signer = provider.getSigner();
 
-  //   //actaully uses the previsouly set up web3 to connect to providers
-  //   const Maticprice = ethers.utils.parseUnits(price, 'ethers')
-  //   //create an instance of the contract so I can interact with it 
-  //   const NFTmarketplace = ethers.Contract(nftMarketAddress, nftMarketABI, signer);
-  //   let listingPrice = await NFTmarketplace.marketFee();
-  //   console.log("Listing Price is: "+ listingPrice);
-  //   listingPrice = listingPrice.toString();
-  //   //calls to the function 
-  //   let createTokenTX = await NFTmarketplace.createToken(url,Maticprice);
-  //   await createTokenTX.wait();
-  //   router.push('/'); 
-  // }
+    //actaully uses the previsouly set up web3 to connect to providers
+    const Maticprice = ethers.utils.parseUnits(price, 'ether')
+    //create an instance of the contract so I can interact with it 
+    const NFTmarketplace = new ethers.Contract(nftMarketAddress, NFTMarketplace.abi, signer);
+    let listingPrice = await NFTmarketplace.marketFee();
+    console.log("Listing Price is: "+ listingPrice);
+    listingPrice = listingPrice.toString();
+    //calls to the function 
+    let createTokenTX = await NFTmarketplace.createToken(url,Maticprice, {value: listingPrice});
+    await createTokenTX.wait();
+    router.push('/'); 
+  }
 
   return (
     <div className="flex justify-center ">
@@ -119,7 +120,7 @@ export default function CreateNFT() {
         )}
         <button
           className=" w-1/2 py-3 px-3 mx-auto mt-8 button bg-pink-500 text-white hover:rounded-2xl transition-all duration-300"
-          onClick={uploadIPFS}
+          onClick={SubmitMarketplace}
         >
           Submit to Marketplace
         </button>
