@@ -28,11 +28,13 @@ export default function Home() {
     //map over the items to get individual image and name
     const items = await Promise.all(
       allNFTs.map(async (nft) => {
+        //when we store nft, we store the uri which was helped by infura client.add method 
         const tokenURI = await NFTMarketContract.tokenURI(nft.tokenId);
         //the image, name and other things like that
         const meta = await axios.get(tokenURI);
-        console.log(meta);
-        //parse is chaning from normal to ether format is changing from ether to normal
+        
+        //parse is chaning from normal representative string  to ether 
+        //format is changing from BIgNumberIsh representing ether to normal
         const value = ethers.utils.formatUnits(nft.price.toString(), "ether");
         let item = {
           value,
@@ -55,6 +57,7 @@ export default function Home() {
     // const x = JSON.stringify(nft); 
     // console.log(x.value)
     //web3 sets up for the wallet to support wallet
+    //modal is like the popup by the way
     const Web3Modal = new web3Modal();
     const instance = await Web3Modal.connect();
     //web3modal gets ready so that you can get the signer wallet not just provider
