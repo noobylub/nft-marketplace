@@ -12,10 +12,10 @@ function MyApp({ Component, pageProps }) {
           <Link href="/create-nft">
             <a  className="mr-10 text-2xl hover-main-menu text-pink-500">Create NFTs</a>
           </Link>
-          <Link href="/my-nfts">
+          <Link href="/my-nft">
             <a  className="mr-10 text-2xl hover-main-menu text-pink-500">My NFTs</a>
           </Link>
-          <Link href="/listed-nfts0x5FbDB2315678afecb367f032d93F642f64180aa3">
+          <Link href="/listed-nfts">
             <a  className="mr-10 text-2xl hover-main-menu text-pink-500">Dashboard</a>
           </Link>
         </div>
