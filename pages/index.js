@@ -28,19 +28,19 @@ export default function Home() {
     //map over the items to get individual image and name
     const items = await Promise.all(
       allNFTs.map(async (nft) => {
-        //when we store nft, we store the uri which was helped by infura client.add method 
+        //when we store nft, we store the uri which was helped by infura client.add method
         const tokenURI = await NFTMarketContract.tokenURI(nft.tokenId);
         //the image, name and other things like that
         const meta = await axios.get(tokenURI);
-        
-        //parse is chaning from normal representative string  to ether 
+
+        //parse is chaning from normal representative string  to ether
         //format is changing from BIgNumberIsh representing ether to normal
         const value = ethers.utils.formatUnits(nft.price.toString(), "ether");
         let item = {
           value,
           tokenId: nft.tokenId.toNumber(),
           seller: nft.seller,
-          image: meta.data.image,
+          image: `https://nftstorage.link/ipfs/${meta.data.image.substring(7)}`,
           name: meta.data.name,
           description: meta.data.description,
         };
@@ -54,7 +54,7 @@ export default function Home() {
   }
 
   async function buyNFTs(nft) {
-    // const x = JSON.stringify(nft); 
+    // const x = JSON.stringify(nft);
     // console.log(x.value)
     //web3 sets up for the wallet to support wallet
     //modal is like the popup by the way
@@ -80,10 +80,11 @@ export default function Home() {
     loadNFTs();
   }
   if (loading === true) {
-    return (<div className="flex justify-center my-6 ">
-      <h1>Please Wait while Loading</h1>
-    </div>)
-
+    return (
+      <div className="flex justify-center my-6 ">
+        <h1>Please Wait while Loading</h1>
+      </div>
+    );
   }
   return (
     <div className="flex flex-col justify-center my-6 ">
@@ -107,9 +108,7 @@ export default function Home() {
                     >
                       {nft.name}
                     </p>
-                    <p className="font-semibold text-2xl">
-                      {nft.seller}
-                    </p>
+                    <p className="font-semibold text-2xl">{nft.seller}</p>
                     <div style={{ height: "70px", overflow: "hidden" }}>
                       <p className="text-gray-400">{nft.description}</p>
                     </div>
@@ -119,7 +118,9 @@ export default function Home() {
                         {nft.value}
                       </p>
                       <button
-                        onClick={() => { buyNFTs(nft) }}
+                        onClick={() => {
+                          buyNFTs(nft);
+                        }}
                         className="mt-4 2-full bg-pink-500 text-white font-bold py-2 px-12 rounded"
                       >
                         Buy {nft.name}
@@ -134,5 +135,4 @@ export default function Home() {
       </div>
     </div>
   );
-
 }
